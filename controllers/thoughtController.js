@@ -86,7 +86,7 @@ const thoughtController = {
     },
 
     // delete reaction
-    deleteFriend(req, res)  {
+    deleteReaction(req, res)  {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactionId: req.params.reactionId } },
