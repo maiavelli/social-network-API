@@ -30,10 +30,22 @@ const thoughtController = {
     // create new thought
     createThought(req, res) {
         Thought.create(req.body)
-        .then((dbThoughtData) => res.json(dbThoughtData))
+        .then((thought) => {
+            return User.findOneAndUpdate(
+                { _id: req.body.userId},
+                { $addToSet: { videos: video._id} },
+                { new: true }
+            );
+        })
+        .then((user) => 
+            !user
+                ? res.status(404).json({
+                    message: 'Thought created, but found no user with that ID.'
+                })
+                : res.json('Thought created 🎉'))
         .catch((err) => {
             console.log(err);
-            return res.status(500).json(err);
+            res.status(500).json(err);
         });
     },
 
@@ -44,13 +56,11 @@ const thoughtController = {
             { $set: req.body },
             { runValidators: true, new: true }
         )
-        .then((dbThoughtData) => {
-            if(!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this ID!' });
-                return;
-            }
-            res.json(dbThoughtData);
-        })
+        .then((thought) => {
+            !thought
+                ? res.status(404).json({ message: 'No thought found with this ID!' });
+                ! res.json(thought)
+        )
         .catch((err) => {
             console.log(err);
             res.status(500).json(err);
@@ -59,14 +69,23 @@ const thoughtController = {
 
     // delete thought
     deleteThought(req, res) {
-        Thought.findOneAndDelete({ _id: req.params.thoughtId })
-        .then((dbThoughtData) => {
-            if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this ID!' });
-                return;
-            }
-            res.json(dbThoughtData);
-        })
+        Thought.findOneAndRemove({ _id: req.params.thoughtId })
+        .then((thought) => 
+            !thought
+                ? res.status(404).json({ message: 'No thought found with this ID!' });
+                ! User.findOneAndUpdate(
+                    { thoughts: req.params.videoId },
+                    { $pull: { thoughts: req.params.thoughtId } },
+                    { new: true }
+                )
+        )
+        .then((user) =>
+            !user
+                ? res
+                    .status(404)
+                    .json({ message: 'Thought created but no user found with this id.'}))
+                : res.json({ message: 'Thought successfully deleted!' })
+        )
         .catch((err) => res.status(500).json(err));
     },
 
