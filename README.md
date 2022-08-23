@@ -27,6 +27,12 @@ You must also have MongoDB installed on your machine.
 To use this application, either run `npm start` or `nodemon index.js` to start the server. You may then use Insomnia or a similar application to test routes and post, update, or delete data on the server database.
 
 ## Demo
+You can find a demo video of all routes [here](https://drive.google.com/file/d/1zr1ITAaiN4PV09wPgo7VlFh6_tEZA6IX/view). 
+
+All routes are also fully listed in the comments in `thoughtRoutes.js` and `userRoutes.js` to help.
+
+![screenshot](./Assets/screenshot.png)
+
 
 
 ## Questions
