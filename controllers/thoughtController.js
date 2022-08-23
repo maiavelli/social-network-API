@@ -56,10 +56,10 @@ const thoughtController = {
             { $set: req.body },
             { runValidators: true, new: true }
         )
-        .then((thought) => {
+        .then((thought) => 
             !thought
-                ? res.status(404).json({ message: 'No thought found with this ID!' });
-                ! res.json(thought)
+                ? res.status(404).json({ message: 'No thought found with this ID!' })
+                : res.json(thought)
         )
         .catch((err) => {
             console.log(err);
@@ -72,8 +72,8 @@ const thoughtController = {
         Thought.findOneAndRemove({ _id: req.params.thoughtId })
         .then((thought) => 
             !thought
-                ? res.status(404).json({ message: 'No thought found with this ID!' });
-                ! User.findOneAndUpdate(
+                ? res.status(404).json({ message: 'No thought found with this ID!' })
+                : User.findOneAndUpdate(
                     { thoughts: req.params.videoId },
                     { $pull: { thoughts: req.params.thoughtId } },
                     { new: true }
@@ -83,7 +83,7 @@ const thoughtController = {
             !user
                 ? res
                     .status(404)
-                    .json({ message: 'Thought created but no user found with this id.'}))
+                    .json({ message: 'Thought created but no user found with this id.'})
                 : res.json({ message: 'Thought successfully deleted!' })
         )
         .catch((err) => res.status(500).json(err));
@@ -96,10 +96,10 @@ const thoughtController = {
             { $addToSet: { reactions: req.body } },
             { new: true }
         )
-        .then((dbReactionData) => 
-            !dbReactionData 
-                ? res.status(404).json({ message: 'No reaction found with this ID!' })
-                : res.json(dbReactionData)
+        .then((thought) => 
+            !thought 
+                ? res.status(404).json({ message: 'No thought found with this ID!' })
+                : res.json(thought)
         )
         .catch((err) => res.status(500).json(err));
     },
@@ -111,10 +111,10 @@ const thoughtController = {
             { $pull: { reactionId: req.params.reactionId } },
             { runValidators: true, new: true }
         )
-        .then((dbReactionData) => 
-            !dbReactionData 
-                ? res.status(404).json({ message: 'No reaction found with this ID!' })
-                : res.json(dbReactionData)
+        .then((thought) => 
+            !thought 
+                ? res.status(404).json({ message: 'No thought found with this ID!' })
+                : res.json(thought)
             )
             .catch((err) => res.status(500).json(err));
     },
